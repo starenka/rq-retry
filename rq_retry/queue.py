@@ -20,7 +20,7 @@ class DeadLetterQueue(Queue):
 
     def quarantine(self, job, queue):
         """Moves job from the specified queue to the dead letter queue"""
-        with self.connection._pipeline() as pipeline:
+        with self.connection.pipeline() as pipeline:
             self.connection.sadd(self.redis_queues_keys, self.key)
             job.ended_at = datetime.utcnow()
             job.save(pipeline=pipeline)
